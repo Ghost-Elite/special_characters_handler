@@ -1,0 +1,163 @@
+# API Documentation
+
+## Classes principales
+
+### SpecialCharactersHandler
+
+La classe principale pour gérer le nettoyage des caractères spéciaux.
+
+#### Méthodes publiques
+
+```dart
+/// Nettoie le texte en appliquant les transformations configurées
+String clean(String input, {CleaningOptions? options})
+
+/// Ajoute une nouvelle règle de remplacement
+void addReplacementRule(ReplacementRule rule)
+
+/// Supprime une règle de remplacement
+void removeReplacementRule(String pattern)
+
+/// Vérifie si le texte contient des caractères spéciaux
+bool containsSpecialCharacters(String input)
+
+/// Extrait les emojis d'un texte
+List<String> extractEmojis(String input)
+
+/// Réinitialise les règles personnalisées
+void resetCustomRules()
+
+/// Retourne les statistiques actuelles
+Map<String, dynamic> getStats()
+```
+
+### CleaningOptions
+
+Configuration des options de nettoyage.
+
+```dart
+class CleaningOptions {
+  final bool removeHtmlEntities;
+  final bool removeEmojis;
+  final bool normalizeUnicode;
+  final bool convertAccents;
+  final bool removeSpecialChars;
+  final bool preserveNewlines;
+
+  const CleaningOptions({
+    this.removeHtmlEntities = true,
+    this.removeEmojis = true,
+    this.normalizeUnicode = true,
+    this.convertAccents = true,
+    this.removeSpecialChars = true,
+    this.preserveNewlines = true,
+  });
+}
+```
+
+### ReplacementRule
+
+Définit une règle de remplacement.
+
+```dart
+class ReplacementRule {
+  final String pattern;
+  final String replacement;
+  final bool isRegex;
+  final bool caseSensitive;
+  final String? category;
+
+  const ReplacementRule({
+    required this.pattern,
+    required this.replacement,
+    this.isRegex = false,
+    this.caseSensitive = true,
+    this.category,
+  });
+}
+```
+
+## Extensions
+
+### StringCleanerExtension
+
+Extension sur String pour un accès facile aux fonctionnalités.
+
+```dart
+extension StringCleanerExtension on String {
+  String cleanSpecialCharacters({CleaningOptions? options})
+  bool hasSpecialCharacters()
+  List<String> extractEmojis()
+}
+```
+
+## Services
+
+### UnicodeService
+
+Service pour la gestion Unicode.
+
+```dart
+class UnicodeService {
+  String normalizeText(String input, CleaningOptions options)
+  String convertAccents(String input)
+}
+```
+
+### HtmlService
+
+Service pour la gestion des entités HTML.
+
+```dart
+class HtmlService {
+  String cleanHtmlEntities(String input, CleaningOptions options)
+}
+```
+
+### EmojiService
+
+Service pour la gestion des emojis.
+
+```dart
+class EmojiService {
+  String removeEmojis(String input, CleaningOptions options)
+  bool containsEmoji(String input)
+}
+```
+
+## Exemples d'utilisation
+
+### Nettoyage basique
+
+```dart
+final handler = SpecialCharactersHandler();
+String result = handler.clean("Héllô &quot;world&quot; 😊");
+```
+
+### Configuration personnalisée
+
+```dart
+final options = CleaningOptions(
+  removeHtmlEntities: true,
+  removeEmojis: false,
+  normalizeUnicode: true,
+);
+
+String result = handler.clean(input, options: options);
+```
+
+### Règles personnalisées
+
+```dart
+handler.addReplacementRule(ReplacementRule(
+  pattern: r'\b\d+\b',
+  replacement: '#',
+  isRegex: true,
+));
+```
+
+### Extension String
+
+```dart
+String cleaned = "Héllô &quot;world&quot; 😊".cleanSpecialCharacters();
+```
