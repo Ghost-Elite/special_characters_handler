@@ -167,7 +167,7 @@ Distribué sous la licence MIT. Voir `LICENSE` pour plus d'informations.
 
 ## Auteur
 
-Votre nom - [@votretwitter](https://twitter.com/votretwitter)
+yayatamba2015@gmail.com
 
 ## Remerciements
 
