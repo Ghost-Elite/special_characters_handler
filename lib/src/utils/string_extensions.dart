@@ -1,4 +1,3 @@
-import 'package:characters/characters.dart';
 import '../models/cleaning_options.dart';
 import '../special_characters_handler_base.dart';
 import '../services/emoji_service.dart';
@@ -6,21 +5,21 @@ import 'character_utils.dart';
 
 extension SpecialCharactersStringExtensions on String {
   // --- Original StringUtils ---
-  bool isNullOrEmpty() => this.isEmpty;
+  bool isNullOrEmpty() => isEmpty;
 
-  bool isNullOrWhiteSpace() => this.trim().isEmpty;
+  bool isNullOrWhiteSpace() => trim().isEmpty;
 
   String truncate(int maxLength, {String suffix = '...'}) {
-    if (this.length <= maxLength) return this;
-    return '${this.substring(0, maxLength)}$suffix';
+    if (length <= maxLength) return this;
+    return '${substring(0, maxLength)}$suffix';
   }
 
   String removeNonPrintableCharacters() {
-    return this.replaceAll(RegExp(r'[\x00-\x1F\x7F-\x9F]'), '');
+    return replaceAll(RegExp(r'[\x00-\x1F\x7F-\x9F]'), '');
   }
 
   String normalizeSpaces() {
-    return this.replaceAll(RegExp(r'\s+'), ' ').trim();
+    return replaceAll(RegExp(r'\s+'), ' ').trim();
   }
 
   // --- From SpecialCharactersHandlerExtension ---

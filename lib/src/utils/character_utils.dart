@@ -10,7 +10,7 @@ class CharacterUtils {
   static final RegExp _spacesRegExp = RegExp(UnicodePatterns.spaces);
   static final RegExp _letterRegExp = RegExp(r'[A-Za-zÀ-ÿ]');
   static final RegExp _digitRegExp = RegExp(r'[0-9]');
-  static final RegExp _punctuationRegExp = RegExp(r'[!#$%&()*+,\-./:;<=>?@\[\]^`{|}~]');
+  static final RegExp _punctuationRegExp = RegExp(r'[!#$%&()*+,\-./:;<=>?@\[\]^_`{|}~]');
   static final RegExp _symbolRegExp = RegExp(r'[§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿×÷]');
 
   static bool isDiacriticalMark(String char) {

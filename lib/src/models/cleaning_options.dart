@@ -9,6 +9,7 @@ class CleaningOptions {
   final bool removeSpecialChars;
   final bool preserveNewlines;
   final bool removeMarkdown;
+  final bool stripHtmlTags;
 
   const CleaningOptions({
     this.removeHtmlEntities = true,
@@ -18,6 +19,7 @@ class CleaningOptions {
     this.removeSpecialChars = true,
     this.preserveNewlines = true,
     this.removeMarkdown = false,
+    this.stripHtmlTags = true,
   });
 
   CleaningOptions copyWith({
@@ -28,6 +30,7 @@ class CleaningOptions {
     bool? removeSpecialChars,
     bool? preserveNewlines,
     bool? removeMarkdown,
+    bool? stripHtmlTags,
   }) {
     return CleaningOptions(
       removeHtmlEntities: removeHtmlEntities ?? this.removeHtmlEntities,
@@ -37,6 +40,7 @@ class CleaningOptions {
       removeSpecialChars: removeSpecialChars ?? this.removeSpecialChars,
       preserveNewlines: preserveNewlines ?? this.preserveNewlines,
       removeMarkdown: removeMarkdown ?? this.removeMarkdown,
+      stripHtmlTags: stripHtmlTags ?? this.stripHtmlTags,
     );
   }
 }

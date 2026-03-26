@@ -1,3 +1,13 @@
+## 1.1.1
+
+### Nouvelles Fonctionnalités
+- **Option de Nettoyage HTML** : Ajout de `stripHtmlTags` dans `CleaningOptions` pour contrôler la suppression des balises après le décodage des entités.
+
+### Améliorations
+- **Slugs URL-friendly** : Les underscores (`_`) sont désormais convertis en tirets dans `toSlug()`.
+
+---
+
 ## 1.1.0
 
 ### Nouvelles Fonctionnalités

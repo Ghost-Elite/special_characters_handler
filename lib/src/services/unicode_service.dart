@@ -1,5 +1,5 @@
 import 'package:characters/characters.dart';
-import '../../special_characters_handler.dart';
+import '../utils/character_utils.dart';
 import '../models/cleaning_options.dart';
 
 class UnicodeService {

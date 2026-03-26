@@ -13,7 +13,6 @@ import 'services/emoji_service.dart';
 import 'utils/character_utils.dart';
 import 'constants/html_entities.dart';
 import 'constants/unicode_patterns.dart';
-import 'constants/emoji_patterns.dart';
 
 /// Résultat de l'analyse de texte
 class TextAnalysisResult {
@@ -108,35 +107,31 @@ class SpecialCharactersHandler {
       );
     }
 
-    // Trouver les emojis
-    List<String> emojis = _emojiService.findEmojis(input);
-
-    // Trouver les caractères spéciaux
-    Set<String> specialChars = {};
-    input.split('').forEach((char) {
-      if (CharacterUtils.isPunctuation(char) || CharacterUtils.isSymbol(char)) {
+    // Analyse en une seule passe des caractères
+    final emojis = <String>[];
+    final specialChars = <String>{};
+    final accents = <String>[];
+    
+    for (final char in input.characters) {
+      if (_emojiService.isEmoji(char)) {
+        emojis.add(char);
+      } else if (CharacterUtils.isPunctuation(char) || CharacterUtils.isSymbol(char)) {
         specialChars.add(char);
+      } else if (UnicodePatterns.accentMap.containsKey(char)) {
+        accents.add(char);
       }
-    });
+    }
 
     // Trouver les entités HTML
-    List<String> htmlEntities = [];
-    for (var entity in HtmlEntities.common.keys) {
+    final htmlEntities = <String>[];
+    for (final entity in HtmlEntities.common.keys) {
       if (input.contains(entity)) {
         htmlEntities.add(entity);
       }
     }
 
-    // Trouver les accents
-    List<String> accents = [];
-    input.split('').forEach((char) {
-      if (UnicodePatterns.accentMap.containsKey(char)) {
-        accents.add(char);
-      }
-    });
-
     // Trouver les URLs YouTube
-    List<String> youtubeUrls = _htmlService.extractYouTubeUrls(input);
+    final youtubeUrls = _htmlService.extractYouTubeUrls(input);
 
     // Nettoyer le texte
     String cleanedText = clean(input, options: CleaningOptions(

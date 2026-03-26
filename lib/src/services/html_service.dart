@@ -10,7 +10,9 @@ class HtmlService {
     String result = _htmlUnescape.convert(input);
 
     // Nettoyage supplémentaire des balises HTML si présentes
-    result = result.replaceAll(RegExp(r'<[^>]*>'), '');
+    if (options.stripHtmlTags) {
+      result = result.replaceAll(RegExp(r'<[^>]*>'), '');
+    }
 
     return result;
   }

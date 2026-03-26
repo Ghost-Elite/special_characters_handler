@@ -20,6 +20,12 @@ class EmojiService {
     return _emojiRegExp.hasMatch(input);
   }
 
+  /// Vérifie si une chaîne (grapheme unit) est un emoji
+  bool isEmoji(String char) {
+    if (char.isEmpty) return false;
+    return _emojiRegExp.hasMatch(char);
+  }
+
   /// Trouve et extrait tous les emojis d'un texte
   List<String> findEmojis(String input) {
     if (input.isEmpty) return [];
