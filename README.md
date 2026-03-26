@@ -4,22 +4,48 @@
 [![Build Status](https://github.com/yourusername/special_characters_handler/workflows/Dart/badge.svg)](https://github.com/yourusername/special_characters_handler/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Un framework Dart puissant et flexible pour gérer les caractères spéciaux, les emojis, et les entités HTML dans vos chaînes de caractères.
+Un framework Dart puissant et flexible pour gérer les caractères spéciaux, les emojis, et les entités HTML dans vos chaînes de caractères. Conçu pour la performance et la simplicité.
+
+---
+
+## 📑 Table des Matières
+
+1. [Caractéristiques](#caractéristiques)
+2. [Installation](#installation)
+3. [Utilisation rapide](#utilisation-rapide)
+4. [Fonctionnalités détaillées](#fonctionnalités-détaillées)
+   - [Analyse complète de texte](#1-analyse-complète-de-texte)
+   - [Niveaux et Types de nettoyage](#2-niveaux-et-types-de-nettoyage)
+   - [Nettoyage personnalisé](#3-nettoyage-personnalisé)
+   - [Gestion des emojis](#4-gestion-des-emojis)
+   - [Support Markdown](#5-support-markdown)
+   - [Slugs URL Friendly](#6-slugs-url-friendly)
+   - [Extraction YouTube](#7-extraction-youtube)
+5. [Configuration avancée](#configuration-avancée)
+6. [Performance](#performance)
+7. [Compatibilité](#compatibilité)
+8. [Contribution](#contribution)
+9. [Licence](#licence)
+
+---
 
 ## Caractéristiques
 
-- 🧹 Nettoyage intelligent des caractères spéciaux
-- 🔄 Conversion des entités HTML
-- 😊 Gestion des emojis
-- 🔗 Génération de slugs (URL friendly)
-- 📝 Suppression du Markdown
-- 🎥 Extraction d'URLs YouTube
-- 🔠 Normalisation Unicode
-- ⚡ Performance optimisée avec cache
-- 🎯 API simple et intuitive
-- 🔧 Hautement configurable
+- 🧹 **Nettoyage intelligent** : Supprime ou transforme les caractères spéciaux selon vos besoins.
+- 🔄 **Entités HTML** : Décodage complet et automatique des entités HTML.
+- 😊 **Emojis** : Détection, extraction et suppression ultra-précise des emojis.
+- 🔗 **Slugs** : Génération de slugs URL-friendly (propres, minuscules, sans accents).
+- 📝 **Markdown** : Nettoyage des balises Markdown (gras, liens, code) en préservant le texte.
+- 🎥 **YouTube** : Extraction d'URLs depuis n'importe quel bloc HTML ou texte brut.
+- 🔠 **Unicode** : Normalisation Unicode (NFC/NFD) et gestion avancée des accents.
+- ⚡ **Performance** : Système de cache LRU intégré pour les textes volumineux.
+- 🎯 **Simple** : API basée sur des extensions String pour une intégration immédiate.
+
+---
 
 ## Installation
+
+Ajoutez cette ligne à votre fichier `pubspec.yaml` :
 
 ```yaml
 dependencies:
@@ -32,126 +58,116 @@ dependencies:
 import 'package:special_characters_handler/special_characters_handler.dart';
 
 void main() {
-  // Utilisation simple avec l'extension String
+  // Nettoyage avec options par défaut
   String text = "Héllô &quot;world&quot; 😊";
-  String cleaned = text.cleanSpecialCharacters();
-  print(cleaned); // Output: Hello "world"
+  print(text.cleanSpecialCharacters()); // Output: Hello "world"
   
-  // Utilisation avec options personnalisées
-  final options = CleaningOptions(
-    removeHtmlEntities: true,
-    removeEmojis: true,
-    normalizeUnicode: true,
-    convertAccents: true,
-  );
+  // Génération de slug instantanée
+  print("Mon Super Article ! 😊".toSlug()); // Output: mon-super-article
   
-  String customCleaned = text.cleanSpecialCharacters(options: options);
-
-  // Génération de slug
-  String slug = "Hello World 😊".toSlug();
-  print(slug); // hello-world
+  // Extraction de vidéos
+  var youtubeLinks = "Regarde: https://youtu.be/dQw4w9WgXcQ".extractYouTubeUrls();
 }
 ```
 
+---
+
 ## Fonctionnalités détaillées
 
-### 1. Configuration personnalisée
+### 1. Analyse complète de texte
 
-#dart
-final handler = SpecialCharactersHandler();
+Idéal pour la validation de formulaires ou le filtrage de contenu.
 
-// Ajout de règles personnalisées
-handler.addReplacementRule(ReplacementRule(
-  pattern: r'[0-9]+',
-  replacement: '#',
-  isRegex: true,
-));
+```dart
+final result = "Héllô 😊 &amp; world".analyzeText();
 
-// Utilisation avec options spécifiques
-final options = CleaningOptions(
-  removeHtmlEntities: true,
-  removeEmojis: false,
-  normalizeUnicode: true,
-  convertAccents: true,
-  removeSpecialChars: true,
-  preserveNewlines: true,
-);
+print(result.originalLength);
+print(result.emojis);            // ['😊']
+print(result.htmlEntities);      // ['&amp;']
+print(result.accents);           // ['é', 'ô']
+print(result.youtubeUrls);       // []
+print(result.cleanedText);       // "Hello & world"
 ```
 
-### 2. Gestion des emojis
+### 2. Niveaux et Types de nettoyage
+
+Gagnez du temps avec les préréglages intégrés.
+
+```dart
+// Par niveau d'agressivité
+text.cleanSpecialCharacters(options: CleaningLevel.light.toOptions());
+text.cleanSpecialCharacters(options: CleaningLevel.medium.toOptions());
+text.cleanSpecialCharacters(options: CleaningLevel.aggressive.toOptions());
+
+// Par type de contenu
+text.cleanSpecialCharacters(options: CleaningType.htmlOnly.toOptions());
+text.cleanSpecialCharacters(options: CleaningType.emojisOnly.toOptions());
+```
+
+### 3. Nettoyage personnalisé
+
+Prenez le contrôle total sur chaque aspect du traitement.
+
+```dart
+final options = CleaningOptions(
+  removeHtmlEntities: true,
+  removeEmojis: true,
+  removeMarkdown: true,
+  convertAccents: true,
+  removeSpecialChars: true,
+  preserveNewlines: false,
+);
+
+String custom = text.cleanSpecialCharacters(options: options);
+```
+
+### 4. Gestion des emojis
 
 ```dart
 String text = "Hello 😊 World 🌍";
 
-// Extraction des emojis
-List<String> emojis = text.extractEmojis();
-
-// Suppression des emojis
-String noEmojis = text.cleanSpecialCharacters(
-  options: CleaningOptions(removeEmojis: true)
-);
+List<String> emojis = text.extractEmojis(); // ['😊', '🌍']
+bool hasEmoji = text.hasEmojis();           // true
+String noEmojis = text.removeEmojis();      // "Hello World "
 ```
 
-### 3. Entités HTML
+### 5. Support Markdown
+
+Transformez du contenu riche en texte brut proprement.
 
 ```dart
-String html = "&quot;Hello&quot; &amp; &apos;World&apos;";
-String cleaned = html.cleanSpecialCharacters();
-print(cleaned); // "Hello" & 'World'
-```
-
-### 4. Support Markdown
-
-```dart
-String markdown = "# Hello\nCeci est du **gras** et un [lien](https://dart.dev)";
+String markdown = "# Titre\n**Gras** et [Lien](https://dart.dev)";
 String cleaned = markdown.cleanSpecialCharacters(
   options: CleaningOptions(removeMarkdown: true)
 );
-print(cleaned); // Hello Ceci est du gras et un lien
+print(cleaned); // "Titre Gras et Lien"
 ```
 
-### 5. Slugs URL Friendly
+### 6. Slugs URL Friendly
+
+Générez des URLs propres automatiquement.
 
 ```dart
-String title = "Mon Super Article ! 😊";
-String slug = title.toSlug();
-print(slug); // mon-super-article
+String title = "Comment créer un Slug en 2024 ! 😊";
+print(title.toSlug()); // "comment-creer-un-slug-en-2024"
 ```
 
-### 6. Extraction YouTube
+### 7. Extraction YouTube
+
+Supporte tous les formats standards : watch, embed, et short links.
 
 ```dart
-String html = '<iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ"></iframe>';
-List<String> videos = html.extractYouTubeUrls();
-print(videos); // ['https://www.youtube.com/embed/dQw4w9WgXcQ']
+String content = 'Vidéo ici : <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ"></iframe>';
+List<String> videos = content.extractYouTubeUrls();
 ```
 
-### 7. Performance
-
-Le framework utilise un système de cache intelligent pour optimiser les performances :
-
-
-final handler = SpecialCharactersHandler();
-
-// Les appels répétés sont mis en cache
-String result1 = handler.clean(longText);
-String result2 = handler.clean(longText); // Utilise le cache
-
-// Statistiques de performance
-Map<String, dynamic> stats = handler.getStats();
-print(stats['cacheSize']);
-
-
-## Documentation API complète
-
-Pour une documentation détaillée de l'API, visitez [la documentation en ligne](https://pub.dev/documentation/special_characters_handler/latest/).
+---
 
 ## Configuration avancée
 
-### Configuration globale
+Configurez les limites globales au démarrage de votre application :
 
 ```dart
-// Dans votre fichier de configuration
 const config = SpecialCharactersConfig(
   maxInputLength: 1000000,
   enableLogging: true,
@@ -159,40 +175,50 @@ const config = SpecialCharactersConfig(
 );
 ```
 
-### Règles personnalisées
+### Règles de remplacement personnalisées
 
-dart
+```dart
 final handler = SpecialCharactersHandler();
 
-// Ajout d'une règle simple
-handler.addReplacementRule(ReplacementRule(
-  pattern: '@',
-  replacement: 'at',
-));
+// Remplacement simple
+handler.addReplacementRule(ReplacementRule(pattern: '@', replacement: 'at'));
 
-// Ajout d'une règle avec expression régulière
+// Expression régulière
 handler.addReplacementRule(ReplacementRule(
-  pattern: r'\b\d+\b',
-  replacement: '#',
+  pattern: r'\b\d{4}\b',
+  replacement: 'YEAR',
   isRegex: true,
 ));
+```
 
+---
+
+## Performance
+
+Le framework est conçu pour être **O(n)**. Il utilise un système de cache LRU (Least Recently Used) qui évite de recalculer le nettoyage pour des chaînes identiques déjà traitées, ce qui est particulièrement efficace dans les interfaces Flutter réactives.
+
+---
+
+## Compatibilité
+
+Ce package est **pure-dart** et compatible avec toutes les plateformes :
+- 📱 Android / iOS
+- 💻 Windows / macOS / Linux
+- 🌐 Web / Server-side (Shelf, Dart Frog)
+
+---
 
 ## Contribution
 
-Les contributions sont les bienvenues ! Voici comment vous pouvez contribuer :
+Les contributions sont les bienvenues !
 
 1. Fork le projet
-2. Créez votre branche de fonctionnalité (`git checkout -b feature/AmazingFeature`)
-3. Committez vos changements (`git commit -m 'Add some AmazingFeature'`)
+2. Créez votre branche (`git checkout -b feature/AmazingFeature`)
+3. Committez vos changements (`git commit -m 'feat: add amazing feature'`)
 4. Push vers la branche (`git push origin feature/AmazingFeature`)
 5. Ouvrez une Pull Request
 
-## Tests
-
-```bash
-dart test
-```
+---
 
 ## Licence
 
@@ -204,5 +230,5 @@ yayatamba2015@gmail.com
 
 ## Remerciements
 
-* Aux contributeurs du projet
-* À la communauté Dart/Flutter
+* À la communauté Dart/Flutter pour ses retours inspirants.
+* Aux mainteneurs des packages `characters`, `html_unescape` et `unicode`.
