@@ -13,6 +13,7 @@ Un framework Dart puissant et flexible pour gérer les caractères spéciaux, le
 - 😊 Gestion des emojis
 - 🔗 Génération de slugs (URL friendly)
 - 📝 Suppression du Markdown
+- 🎥 Extraction d'URLs YouTube
 - 🔠 Normalisation Unicode
 - ⚡ Performance optimisée avec cache
 - 🎯 API simple et intuitive
@@ -117,7 +118,15 @@ String slug = title.toSlug();
 print(slug); // mon-super-article
 ```
 
-### 6. Performance
+### 6. Extraction YouTube
+
+```dart
+String html = '<iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ"></iframe>';
+List<String> videos = html.extractYouTubeUrls();
+print(videos); // ['https://www.youtube.com/embed/dQw4w9WgXcQ']
+```
+
+### 7. Performance
 
 Le framework utilise un système de cache intelligent pour optimiser les performances :
 

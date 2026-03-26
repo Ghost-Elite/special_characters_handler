@@ -21,6 +21,7 @@ class TextAnalysisResult {
   final List<String> specialCharacters;
   final List<String> htmlEntities;
   final List<String> accents;
+  final List<String> youtubeUrls;
   final String cleanedText;
   final int originalLength;
   final int cleanedLength;
@@ -30,6 +31,7 @@ class TextAnalysisResult {
     required this.specialCharacters,
     required this.htmlEntities,
     required this.accents,
+    required this.youtubeUrls,
     required this.cleanedText,
     required this.originalLength,
     required this.cleanedLength,
@@ -45,6 +47,7 @@ class TextAnalysisResult {
     - Caractères spéciaux (${specialCharacters.length}): $specialCharacters
     - Entités HTML (${htmlEntities.length}): $htmlEntities
     - Accents (${accents.length}): $accents
+    - URLs YouTube (${youtubeUrls.length}): $youtubeUrls
     - Texte nettoyé: "$cleanedText"
     ''';
   }
@@ -98,6 +101,7 @@ class SpecialCharactersHandler {
         specialCharacters: [],
         htmlEntities: [],
         accents: [],
+        youtubeUrls: [],
         cleanedText: input,
         originalLength: 0,
         cleanedLength: 0,
@@ -131,6 +135,9 @@ class SpecialCharactersHandler {
       }
     });
 
+    // Trouver les URLs YouTube
+    List<String> youtubeUrls = _htmlService.extractYouTubeUrls(input);
+
     // Nettoyer le texte
     String cleanedText = clean(input, options: CleaningOptions(
       removeEmojis: true,
@@ -145,6 +152,7 @@ class SpecialCharactersHandler {
       specialCharacters: specialChars.toList(),
       htmlEntities: htmlEntities,
       accents: accents,
+      youtubeUrls: youtubeUrls,
       cleanedText: cleanedText,
       originalLength: input.length,
       cleanedLength: cleanedText.length,
@@ -293,6 +301,11 @@ class SpecialCharactersHandler {
 
   List<String> extractEmojis(String input) {
     return _emojiService.findEmojis(input);
+  }
+
+  /// Extrait toutes les URLs YouTube du texte
+  List<String> extractYouTubeUrls(String input) {
+    return _htmlService.extractYouTubeUrls(input);
   }
 
   @visibleForTesting

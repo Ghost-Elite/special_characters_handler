@@ -47,5 +47,20 @@ void main() {
         expect(handler.clean('&quot;test&quot;'), equals('"test"'));
       });
     });
+
+    group('YouTube Extraction', () {
+      test('Extract from HTML attributes', () {
+        final html = '<iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ"></iframe>';
+        expect(html.extractYouTubeUrls(), equals(['https://www.youtube.com/embed/dQw4w9WgXcQ']));
+      });
+
+      test('Extract from plain text', () {
+        final text = 'Regarde cette vidéo: https://youtu.be/dQw4w9WgXcQ et celle-là: https://www.youtube.com/watch?v=dQw4w9WgXcQ';
+        final urls = text.extractYouTubeUrls();
+        expect(urls.length, equals(2));
+        expect(urls, contains('https://youtu.be/dQw4w9WgXcQ'));
+        expect(urls, contains('https://www.youtube.com/watch?v=dQw4w9WgXcQ'));
+      });
+    });
   });
 }

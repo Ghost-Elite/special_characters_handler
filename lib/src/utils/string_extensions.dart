@@ -75,4 +75,9 @@ extension SpecialCharactersStringExtensions on String {
   String toSlug() {
     return CharacterUtils.toUrlFriendly(this);
   }
+
+  /// Extrait toutes les URLs YouTube du texte HTML
+  List<String> extractYouTubeUrls() {
+    return SpecialCharactersHandler().extractYouTubeUrls(this);
+  }
 }
