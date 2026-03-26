@@ -28,7 +28,7 @@ export 'src/utils/string_extensions.dart';
 export 'src/utils/character_utils.dart';
 
 /// Version actuelle du package
-const String packageVersion = '1.0.0';
+const String packageVersion = '1.1.0';
 
 /// Documentation rapide des fonctionnalités principales
 ///
