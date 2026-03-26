@@ -51,4 +51,4 @@ platforms:
   windows:
 
 # Configuration de publication
-publish_to: https://pub.dev/
+# publish_to: https://pub.dev
