@@ -1,13 +1,3 @@
-## 1.1.1
-
-### Nouvelles Fonctionnalités
-- **Option de Nettoyage HTML** : Ajout de `stripHtmlTags` dans `CleaningOptions` pour contrôler la suppression des balises après le décodage des entités.
-
-### Améliorations
-- **Slugs URL-friendly** : Les underscores (`_`) sont désormais convertis en tirets dans `toSlug()`.
-
----
-
 ## 1.1.0
 
 ### Nouvelles Fonctionnalités
@@ -15,8 +5,10 @@
 - **Support des Slugs** : Ajout de la méthode `toSlug()` pour générer des URLs propres (minuscules, sans accents, sans emojis).
 - **Nettoyage Markdown** : Nouvelle option `removeMarkdown` pour supprimer les balises (gras, liens, code) en préservant le texte.
 - **Analyse Enrichie** : `analyzeText()` inclut désormais l'extraction automatique des URLs YouTube.
+- **Option de Nettoyage HTML** : Ajout de `stripHtmlTags` dans `CleaningOptions` pour contrôler la suppression des balises après le décodage des entités.
 
 ### Améliorations
+- **Slugs URL-friendly** : Les underscores (`_`) sont désormais convertis en tirets dans `toSlug()`.
 - **Refactorisation des Extensions** : Consolidation de toutes les méthodes d'extension `String` dans un fichier unique pour une API plus claire.
 - **Gestion des Emojis** : Détection plus exhaustive via le pattern centralisé `EmojiPatterns`.
 - **Performance** : Système de cache LRU optimisé pour le traitement de gros volumes de texte.

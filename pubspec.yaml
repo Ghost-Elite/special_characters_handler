@@ -1,8 +1,8 @@
 name: special_characters_handler
 description: A powerful framework for handling special characters, emojis, and HTML entities in strings
-version: 1.1.1
-homepage: https://github.com/yourusername/special_characters_handler
-repository: https://github.com/yourusername/special_characters_handler
+version: 1.1.0
+homepage: https://github.com/Ghost-Elite/special_characters_handler
+repository: https://github.com/Ghost-Elite/special_characters_handler
 
 environment:
   sdk: ^3.3.4
