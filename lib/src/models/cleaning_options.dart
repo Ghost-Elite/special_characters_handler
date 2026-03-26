@@ -8,6 +8,7 @@ class CleaningOptions {
   final bool convertAccents;
   final bool removeSpecialChars;
   final bool preserveNewlines;
+  final bool removeMarkdown;
 
   const CleaningOptions({
     this.removeHtmlEntities = true,
@@ -16,6 +17,7 @@ class CleaningOptions {
     this.convertAccents = true,
     this.removeSpecialChars = true,
     this.preserveNewlines = true,
+    this.removeMarkdown = false,
   });
 
   CleaningOptions copyWith({
@@ -25,6 +27,7 @@ class CleaningOptions {
     bool? convertAccents,
     bool? removeSpecialChars,
     bool? preserveNewlines,
+    bool? removeMarkdown,
   }) {
     return CleaningOptions(
       removeHtmlEntities: removeHtmlEntities ?? this.removeHtmlEntities,
@@ -33,6 +36,7 @@ class CleaningOptions {
       convertAccents: convertAccents ?? this.convertAccents,
       removeSpecialChars: removeSpecialChars ?? this.removeSpecialChars,
       preserveNewlines: preserveNewlines ?? this.preserveNewlines,
+      removeMarkdown: removeMarkdown ?? this.removeMarkdown,
     );
   }
 }

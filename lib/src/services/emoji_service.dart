@@ -33,18 +33,3 @@ class EmojiService {
     return findEmojis(input).length;
   }
 }
-
-// Extension String pour faciliter l'utilisation
-extension EmojiExtension on String {
-  /// Supprime les emojis du texte
-  String removeEmojis() {
-    return EmojiService().removeEmojis(this);
-  }
-
-  /// Vérifie si le texte contient des emojis
-  bool hasEmojis() {
-    return EmojiService().hasEmoji(this);
-  }
-
-
-}

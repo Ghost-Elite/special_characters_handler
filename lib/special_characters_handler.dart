@@ -27,9 +27,6 @@ export 'src/config/special_characters_config.dart';
 export 'src/utils/string_extensions.dart';
 export 'src/utils/character_utils.dart';
 
-// Re-export des extensions String pour faciliter l'utilisation
-export 'src/utils/string_extensions.dart' show StringCleanerExtension;
-
 /// Version actuelle du package
 const String packageVersion = '1.0.0';
 

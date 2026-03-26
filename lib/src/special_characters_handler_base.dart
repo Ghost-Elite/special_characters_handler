@@ -82,23 +82,12 @@ class SpecialCharactersHandler {
 
   /// Initialise les règles de remplacement par défaut
   void _initializeDefaultRules() {
-    // Ajout des règles HTML
-    HtmlEntities.common.forEach((entity, replacement) {
-      _customRules.add(ReplacementRule(
-        pattern: entity,
-        replacement: replacement,
-        category: 'html',
-      ));
-    });
+    // Les entités HTML sont gérées par HtmlService qui utilise html_unescape
+    // On n'ajoute ici que les règles qui ne sont pas couvertes par les services
+    // ou qui nécessitent un traitement spécifique.
 
-    // Ajout des règles Unicode
-    UnicodePatterns.accentMap.forEach((accent, replacement) {
-      _customRules.add(ReplacementRule(
-        pattern: accent,
-        replacement: replacement,
-        category: 'accent',
-      ));
-    });
+    // Ajout des règles Unicode pour les accents si nécessaire par défaut
+    // Note: UnicodeService gère déjà cela via convertAccents
   }
 
   /// Analyse complète du texte
@@ -195,6 +184,10 @@ class SpecialCharactersHandler {
         result = _unicodeService.convertAccents(result);
       }
 
+      if (options.removeMarkdown) {
+        result = _stripMarkdown(result);
+      }
+
       result = _applyCustomRules(result, options);
 
       if (!options.preserveNewlines) {
@@ -240,6 +233,29 @@ class SpecialCharactersHandler {
 
   // ... Autres méthodes d'utilité
 
+  String _stripMarkdown(String input) {
+    if (input.isEmpty) return input;
+    var result = input;
+
+    // Supprimer les liens [texte](url) -> texte
+    result = result.replaceAllMapped(RegExp(r'\[([^\]]+)\]\([^\)]+\)'), (match) => match.group(1) ?? '');
+
+    // Supprimer le gras et l'italique
+    result = result.replaceAllMapped(RegExp(r'(\*\*|__)(.*?)\1'), (match) => match.group(2) ?? '');
+    result = result.replaceAllMapped(RegExp(r'(\*|_)(.*?)\1'), (match) => match.group(2) ?? '');
+    // Version plus robuste si le précédent échoue sur certains cas
+    result = result.replaceAll(RegExp(r'\*\*|__|[\*_]'), '');
+
+    // Supprimer les titres #, ##, etc.
+    result = result.replaceAll(RegExp(r'^#+\s*', multiLine: true), '');
+
+    // Supprimer les blocs de code (on garde le contenu)
+    result = result.replaceAllMapped(RegExp(r'```[\s\S]*?\n?([\s\S]*?)```'), (match) => match.group(1) ?? '');
+    result = result.replaceAllMapped(RegExp(r'`([^`]+)`'), (match) => match.group(1) ?? '');
+
+    return result;
+  }
+
   String _applyCustomRules(String input, CleaningOptions options) {
     var result = input;
     for (final rule in _customRules) {
@@ -283,44 +299,5 @@ class SpecialCharactersHandler {
   void dispose() {
     _clearCache();
     _customRules.clear();
-  }
-}
-
-/// Extensions pour String
-extension SpecialCharactersHandlerExtension on String {
-  TextAnalysisResult analyzeText() {
-    return SpecialCharactersHandler().analyzeText(this);
-  }
-
-  String cleanSpecialCharacters({CleaningOptions? options}) {
-    return SpecialCharactersHandler().clean(this, options: options);
-  }
-
-  String removeOnlyEmojis() {
-    return SpecialCharactersHandler().removeOnlyEmojis(this);
-  }
-
-  String removeOnlySpecialCharacters() {
-    return SpecialCharactersHandler().removeOnlySpecialCharacters(this);
-  }
-
-  String removeOnlyAccents() {
-    return SpecialCharactersHandler().removeOnlyAccents(this);
-  }
-
-  String removeOnlyHtmlEntities() {
-    return SpecialCharactersHandler().removeOnlyHtmlEntities(this);
-  }
-
-  bool hasSpecialCharacters() {
-    return SpecialCharactersHandler().containsSpecialCharacters(this);
-  }
-
-  bool containsEmoji() {
-    return SpecialCharactersHandler().containsEmoji(this);
-  }
-
-  List<String> extractEmojis() {
-    return SpecialCharactersHandler().extractEmojis(this);
   }
 }

@@ -1,5 +1,6 @@
 // lib/src/utils/character_utils.dart
 import '../constants/unicode_patterns.dart';
+import '../special_characters_handler_base.dart';
 
 class CharacterUtils {
   // Expressions régulières pré-compilées
@@ -109,7 +110,8 @@ class CharacterUtils {
   static String toUrlFriendly(String text) {
     if (text.isEmpty) return text;
 
-    var result = stripAccents(text.toLowerCase());
+    var result = SpecialCharactersHandler().removeOnlyEmojis(text);
+    result = stripAccents(result.toLowerCase());
     result = result.replaceAll(_punctuationRegExp, '-');
     result = result.replaceAll(_symbolRegExp, '');
     result = result.replaceAll(_spacesRegExp, '-');

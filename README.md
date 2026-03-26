@@ -11,6 +11,8 @@ Un framework Dart puissant et flexible pour gérer les caractères spéciaux, le
 - 🧹 Nettoyage intelligent des caractères spéciaux
 - 🔄 Conversion des entités HTML
 - 😊 Gestion des emojis
+- 🔗 Génération de slugs (URL friendly)
+- 📝 Suppression du Markdown
 - 🔠 Normalisation Unicode
 - ⚡ Performance optimisée avec cache
 - 🎯 API simple et intuitive
@@ -43,6 +45,10 @@ void main() {
   );
   
   String customCleaned = text.cleanSpecialCharacters(options: options);
+
+  // Génération de slug
+  String slug = "Hello World 😊".toSlug();
+  print(slug); // hello-world
 }
 ```
 
@@ -93,7 +99,25 @@ String cleaned = html.cleanSpecialCharacters();
 print(cleaned); // "Hello" & 'World'
 ```
 
-### 4. Performance
+### 4. Support Markdown
+
+```dart
+String markdown = "# Hello\nCeci est du **gras** et un [lien](https://dart.dev)";
+String cleaned = markdown.cleanSpecialCharacters(
+  options: CleaningOptions(removeMarkdown: true)
+);
+print(cleaned); // Hello Ceci est du gras et un lien
+```
+
+### 5. Slugs URL Friendly
+
+```dart
+String title = "Mon Super Article ! 😊";
+String slug = title.toSlug();
+print(slug); // mon-super-article
+```
+
+### 6. Performance
 
 Le framework utilise un système de cache intelligent pour optimiser les performances :
 
